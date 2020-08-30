@@ -7,8 +7,6 @@ import dataimportservices.GithubExtractService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import org.json.simple.*;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +37,6 @@ public class ResumeParsing {
         AdzunaExtractService aes = new AdzunaExtractService();
         JSONObject adzunaJsonObject = aes.adzunaExtract(keyword, location);
 
-        //String results =  (String) adzunaJsonObject.get("results");
-        //JSONArray resultArray = new JSONArray(results);
         JSONArray adzunaResultArray = (JSONArray) adzunaJsonObject.get("results");
         for (int i = 0; i < adzunaResultArray.length(); i++) {
             JSONObject jsonobject = adzunaResultArray.getJSONObject(i);
@@ -59,16 +55,11 @@ public class ResumeParsing {
                 JobEntity jobEntry = new JobEntity(redirect_url, weight, "Adzuna");
                 pq.add(jobEntry);
             }
-
-            //Document doc = Jsoup.connect(redirect_url).get();
-            //JSONObject jobObj = jobresponse.getBody().getObject();
-            //System.out.println(doc.toString());
         }
 
         GithubExtractService ges = new GithubExtractService();
         JSONArray gitResultArray = ges.githubExtract(keyword, location);
 
-        //JSONArray gitResultArray = (JSONArray) githubJsonObject.get;
         for (int i = 0; i < gitResultArray.length(); i++) {
             JSONObject jsonobject = gitResultArray.getJSONObject(i);
             String title = jsonobject.getString("title");
@@ -86,12 +77,7 @@ public class ResumeParsing {
                 JobEntity jobEntry = new JobEntity(url, weight, "Github");
                 pq.add(jobEntry);
             }
-
-            //Document doc = Jsoup.connect(redirect_url).get();
-            //JSONObject jobObj = jobresponse.getBody().getObject();
-            //System.out.println(doc.toString());
         }
-
 
         CareerjetExtractService cjes = new CareerjetExtractService();
         org.json.simple.JSONObject cjJsonObject = cjes.careerjetExtract(skills.split("\\s*,\\s*")[0], location);

@@ -19,18 +19,12 @@ import java.io.IOException;
 import java.util.PriorityQueue;
 
 public class UserInterface implements ActionListener {
-    //private static String labelPrefix = "Number of button clicks: ";
+
     private int numClicks = 0;
     final JLabel label = new JLabel("  ");
 
-    // Specify the look and feel to use by defining the LOOKANDFEEL constant
-    // Valid values are: null (use the default), "Metal", "System", "Motif",
-    // and "GTK"
     final static String LOOKANDFEEL = "Metal";
 
-    // If you choose the Metal L&F, you can also choose a theme.
-    // Specify the theme to use by defining the THEME constant
-    // Valid values are: "DefaultMetal", "Ocean",  and "Test"
     final static String THEME = "Test";
     JMenuItem open;
     JFrame frame;
@@ -40,6 +34,7 @@ public class UserInterface implements ActionListener {
     JTextArea resumeTextArea;
     JTextField keywrdText;
     JTextField locationText;
+    ResultUi resultUi;
 
     public Component createComponents() {
         JPanel pane1 = new JPanel(new GridLayout(2, 2));
@@ -85,12 +80,6 @@ public class UserInterface implements ActionListener {
         button.addActionListener(this);
         label.setLabelFor(button);
 
-        /*
-         * An easy way to put space between a top-level container
-         * and its contents is to put the contents in a JPanel
-         * that has an "empty" border.
-         */
-        //JPanel pane = new JPanel(new GridLayout(1, 1));
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER;
 
@@ -155,9 +144,13 @@ public class UserInterface implements ActionListener {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+                if (pq.size() > 0){
+                    resultUi = new ResultUi();
+                    resultUi.showResultGUI();
+                }
                 while(!pq.isEmpty()){
                     JobEntity je = pq.poll();
-                    resumeTextArea.append(je.getUrl()+"  -  "+je.getWeight()+"\n");
+                    resultUi.resultTextArea.setText(resultUi.resultTextArea.getText()+ je.getUrl()+"  -  "+je.getWeight()+"\n");
                 }
             } catch (UnirestException unirestException) {
                 unirestException.printStackTrace();
@@ -170,17 +163,6 @@ public class UserInterface implements ActionListener {
             if (i == JFileChooser.APPROVE_OPTION) {
                 File f = fc.getSelectedFile();
                 filepath = f.getPath();
-                /*try {
-                    BufferedReader br = new BufferedReader(new FileReader(filepath));
-                    String s1 = "", s2 = "";
-                    while ((s1 = br.readLine()) != null) {
-                        s2 += s1 + "\n";
-                        break;
-                    }
-                    br.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }*/
 
                 label.setText(filepath);
             }
@@ -192,9 +174,6 @@ public class UserInterface implements ActionListener {
         if (LOOKANDFEEL != null) {
             if (LOOKANDFEEL.equals("Metal")) {
                 lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-                //  an alternative way to set the Metal L&F is to replace the
-                // previous line with:
-                // lookAndFeel = "javax.swing.plaf.metal.MetalLookAndFeel";
 
             } else if (LOOKANDFEEL.equals("System")) {
                 lookAndFeel = UIManager.getSystemLookAndFeelClassName();
@@ -245,27 +224,18 @@ public class UserInterface implements ActionListener {
         }
     }
 
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event dispatch thread.
-     */
     public void createAndShowGUI() {
-        //Set the look and feel.
+
         initLookAndFeel();
 
-        //Make sure we have nice window decorations.
         JFrame.setDefaultLookAndFeelDecorated(true);
 
-        //Create and set up the window.
         frame = new JFrame("Personalized job listing app");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //UserInterface app = new UserInterface();
         Component contents = this.createComponents();
         frame.getContentPane().add(contents, BorderLayout.CENTER);
 
-        //Display the window.
         frame.pack();
         frame.setVisible(true);
     }

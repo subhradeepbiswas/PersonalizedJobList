@@ -11,8 +11,7 @@ import java.io.IOException;
 public class GithubExtractService {
 
     public JSONArray githubExtract(String keyword, String location) throws UnirestException {
-        //String keyword = "software";
-        //String location = "san+francisco";
+
         String keywordStr = "";
         boolean kwbegin = true;
         for (String s: keyword.split(" ")){
@@ -40,7 +39,6 @@ public class GithubExtractService {
                                             .asString();
 
         JSONArray gitResponseArray = new JSONArray(response.getBody().toString());
-        //JSONArray gitResponseObj = (JSONArray) response;
         String fileName = "github_jobs.json";
         try{
             FileWriter file = new FileWriter(fileName);

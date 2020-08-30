@@ -41,10 +41,6 @@ public class AdzunaExtractService {
                 .header("x-rapidapi-key", ExtractConfig.adzuna_rapidApiKey)
                 .asJson();
 
-        //JSONObject myObj = request.getBody().getObject();
-        //JSONObject jsonObj = response.getBody().getObject();
-        //System.out.println(response.getBody().getObject().toString());
-
         JSONObject myObj = response.getBody().getObject();
         String fileName = "adzuna_jobs.json";
         try{
@@ -55,10 +51,5 @@ public class AdzunaExtractService {
         }
 
         return myObj;
-
-        // extract fields from the object
-        //String count = myObj.getString("count");
-        //String _class = myObj.getString("__CLASS__");
-        //System.out.println(_class);
     }
 }
